@@ -25,11 +25,12 @@ public class MoneyTransferService {
             throw new ErrorTransfer("Non-existed number of card to");
         }
         double paidSum = transferInfo.getAmount().getValue() + transferInfo.getAmount().getFee();
-
-        if (transferInfo.getCardFrom().getBalance() < paidSum) {
+        double curBalance = transferInfo.getCardFrom().getBalance();
+        if (curBalance < paidSum) {
             moneyTransferRepository.registerNewTransfer(transferInfo, false);
             throw new ErrorTransfer("Not enough money on card from");
         }
+        transferInfo.getCardFrom().setBalance(curBalance - paidSum);
         moneyTransferRepository.registerNewTransfer(transferInfo, true);
     }
 

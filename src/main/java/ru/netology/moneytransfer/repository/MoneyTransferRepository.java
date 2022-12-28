@@ -8,18 +8,25 @@ import ru.netology.moneytransfer.logger.TextFileLogger;
 import ru.netology.moneytransfer.model.Card;
 import ru.netology.moneytransfer.model.TransferInfo;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.ConcurrentHashMap;
 
+import static ru.netology.moneytransfer.util.FileUtils.readCardsFromFile;
+
 @Repository
 public class MoneyTransferRepository {
     private final String pathFileLogger = "src/main/resources/";
     private final String fileLoggerName = "file.log";
+    private final String fileCardDbName = "card_db";
     private final Logger textFileLogger = new TextFileLogger(pathFileLogger, fileLoggerName);
-    private final ConcurrentHashMap<String, Card> registeredCards = new ConcurrentHashMap<>();
+    private final ConcurrentHashMap<String, Card> registeredCards = readCardsFromFile(pathFileLogger, fileCardDbName);
     private final ArrayBlockingQueue<TransferInfo> transferQueue = new ArrayBlockingQueue<>(1);
+
+    public MoneyTransferRepository() throws IOException {
+    }
 
     public Boolean checkCardExistence(Card card) {
         return registeredCards.get(card.getNumber()) != null;

@@ -1,11 +1,12 @@
 package ru.netology.moneytransfer.util;
 
-import org.springframework.stereotype.Component;
+import ru.netology.moneytransfer.model.Card;
 
 import java.io.*;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class FileUtils {
     public static Boolean createNewFile(String path, String fileName) {
@@ -21,17 +22,20 @@ public class FileUtils {
         }
     }
 
-    public static Map<String, String> readCardsFromFile(String path, String file) throws IOException {
+    public static ConcurrentHashMap<String, Card> readCardsFromFile(String path, String file) throws IOException {
         try (BufferedReader reader = new BufferedReader(new FileReader(path + file))) {
             String str;
-            Map<String, String> settings = new HashMap<>();
+            ConcurrentHashMap<String, Card> registeredCards = new ConcurrentHashMap<>();
             while((str = reader.readLine()) != null) {
-                String[] tmp = str.split("=");
-                if (tmp.length == 2) {
-                    settings.put(tmp[0], tmp[1]);
-                }
+                String[] tmp = str.split(",");
+                String cardNumber = tmp[0];
+                String cardValidTill = tmp[1];
+                String cardCvc = tmp[2];
+                Double balance = (double) (Integer.parseInt(tmp[3]) / 100);
+                Card card = new Card(cardNumber, cardValidTill, cardCvc, balance);
+                registeredCards.put(cardNumber, card);
             }
-            return settings;
+            return registeredCards;
         } catch (IOException ex) {
             System.out.println(Arrays.toString(ex.getStackTrace()));
             throw new IOException(ex);

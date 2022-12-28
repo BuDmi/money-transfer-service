@@ -3,8 +3,8 @@ package ru.netology.moneytransfer.model;
 import ru.netology.moneytransfer.exception.ErrorInputData;
 
 public class Amount {
-    private Integer value;
-    private String currency;
+    private final Integer value;
+    private final String currency;
     private final double fee;
 
     private final double PERCENT = 0.01;
@@ -31,6 +31,10 @@ public class Amount {
 
     public int getValue() {
         return value;
+    }
+
+    public double getFee() {
+        return fee;
     }
 
     @Override

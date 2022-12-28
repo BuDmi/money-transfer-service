@@ -4,14 +4,14 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.Random;
 
-public class CardTransfer {
+public class TransferInfo {
     private final Card cardFrom;
     private final Card cardTo;
     private final Amount amount;
     private final Integer operationId;
 
 
-    public CardTransfer(@JsonProperty("cardFromNumber") String fromNumber,
+    public TransferInfo(@JsonProperty("cardFromNumber") String fromNumber,
                         @JsonProperty("cardFromValidTill") String validTill,
                         @JsonProperty("cardFromCVV") String cardCVV,
                         @JsonProperty("cardToNumber") String toNumber,

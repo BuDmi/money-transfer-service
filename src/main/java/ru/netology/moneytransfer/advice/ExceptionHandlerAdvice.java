@@ -7,22 +7,26 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import ru.netology.moneytransfer.exception.ErrorConfirmation;
 import ru.netology.moneytransfer.exception.ErrorInputData;
 import ru.netology.moneytransfer.exception.ErrorTransfer;
+import ru.netology.moneytransfer.model.ErrorResponse;
 
 @RestControllerAdvice
 public class ExceptionHandlerAdvice {
 
     @ExceptionHandler(ErrorInputData.class)
-    public ResponseEntity<String> eidHandler(ErrorInputData e) {
-        return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+    public ResponseEntity<ErrorResponse> eidHandler(ErrorInputData e) {
+        HttpStatus httpStatus = HttpStatus.BAD_REQUEST;
+        return new ResponseEntity<>(new ErrorResponse(e.getMessage(), httpStatus.value()), httpStatus);
     }
 
     @ExceptionHandler(ErrorTransfer.class)
-    public ResponseEntity<String> etHandler(ErrorTransfer e) {
-        return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+    public ResponseEntity<ErrorResponse> etHandler(ErrorTransfer e) {
+        HttpStatus httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
+        return new ResponseEntity<>(new ErrorResponse(e.getMessage(), httpStatus.value()), httpStatus);
     }
 
     @ExceptionHandler(ErrorConfirmation.class)
-    public ResponseEntity<String> ecHandler(ErrorConfirmation e) {
-        return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+    public ResponseEntity<ErrorResponse> ecHandler(ErrorConfirmation e) {
+        HttpStatus httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
+        return new ResponseEntity<>(new ErrorResponse(e.getMessage(), httpStatus.value()), httpStatus);
     }
 }

@@ -10,6 +10,14 @@ public class Card {
     private final String number;
     private final String validTill;
     private final String cvc;
+    private Float balance = 0f;
+
+    public Card(String number, String validTill, String cvc, Float balance) {
+        this.number = processCardNumber(number);
+        this.validTill = processValidTill(validTill);
+        this.cvc = processCvc(cvc);
+        this.balance = balance;
+    }
 
     public Card(String number, String validTill, String cvc) {
         this.number = processCardNumber(number);
@@ -81,5 +89,13 @@ public class Card {
 
     public String getCvc() {
         return cvc;
+    }
+
+    public Float getBalance() {
+        return balance;
+    }
+
+    public void setBalance(Float balance) {
+        this.balance = balance;
     }
 }

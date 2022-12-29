@@ -10,7 +10,7 @@ public class Card {
     private final String number;
     private final String validTill;
     private final String cvc;
-    private Double balance = 0.;
+    private Double balance;
 
     public Card(String number, String validTill, String cvc, Double balance) {
         this.number = processCardNumber(number);
@@ -23,12 +23,14 @@ public class Card {
         this.number = processCardNumber(number);
         this.validTill = processValidTill(validTill);
         this.cvc = processCvc(cvc);
+        this.balance = 0.;
     }
 
     public Card(String number) {
         this.number = processCardNumber(number);
         this.validTill = null;
         this.cvc = null;
+        this.balance = null;
     }
 
     private String processCvc(String cvc) {

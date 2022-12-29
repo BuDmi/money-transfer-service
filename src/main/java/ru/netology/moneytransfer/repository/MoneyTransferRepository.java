@@ -32,6 +32,22 @@ public class MoneyTransferRepository {
         return registeredCards.get(card.getNumber()) != null;
     }
 
+    public Double getCardBalance(Card card) {
+        return registeredCards.get(card.getNumber()).getBalance();
+    }
+
+    public void updateBalance(Card card, Double newBalance) {
+        registeredCards.get(card.getNumber()).setBalance(newBalance);
+    }
+
+    public Boolean checkValidTill(Card card) {
+        return registeredCards.get(card.getNumber()).getValidTill().equals(card.getValidTill());
+    }
+
+    public Boolean checkCardCvc(Card card) {
+        return registeredCards.get(card.getNumber()).getCvc().equals(card.getCvc());
+    }
+
     @SneakyThrows
     public void registerNewTransfer(TransferInfo transferInfo, Boolean successTransfer) {
         if (successTransfer) {
@@ -46,7 +62,7 @@ public class MoneyTransferRepository {
         try {
             transferInfo = transferQueue.take();
         } catch (InterruptedException e) {
-            throw new ErrorTransfer("Failed to transfer money");
+            throw new ErrorTransfer("Ошибка при переводе денег");
         }
         textFileLogger.logNewMessage(getTransferInfoText(transferInfo, successTransfer));
     }

@@ -18,19 +18,27 @@ public class MoneyTransferService {
     public void registerNewTransfer(TransferInfo transferInfo) {
         if (!moneyTransferRepository.checkCardExistence(transferInfo.getCardFrom())) {
             moneyTransferRepository.registerNewTransfer(transferInfo, false);
-            throw new ErrorTransfer("Non-existed number of card from");
+            throw new ErrorTransfer("Несуществующий номер карты отправителя");
         }
         if (!moneyTransferRepository.checkCardExistence(transferInfo.getCardTo())) {
             moneyTransferRepository.registerNewTransfer(transferInfo, false);
-            throw new ErrorTransfer("Non-existed number of card to");
+            throw new ErrorTransfer("Несуществующий номер карты получателя");
         }
-        double paidSum = transferInfo.getAmount().getValue() + transferInfo.getAmount().getFee();
-        double curBalance = transferInfo.getCardFrom().getBalance();
+        if (!moneyTransferRepository.checkValidTill(transferInfo.getCardFrom())) {
+            moneyTransferRepository.registerNewTransfer(transferInfo, false);
+            throw new ErrorTransfer("Неверный срок действия карты");
+        }
+        if (!moneyTransferRepository.checkCardCvc(transferInfo.getCardFrom())) {
+            moneyTransferRepository.registerNewTransfer(transferInfo, false);
+            throw new ErrorTransfer("Неверный CVC");
+        }
+        double paidSum = (double) transferInfo.getAmount().getValue() + transferInfo.getAmount().getFee();
+        double curBalance = moneyTransferRepository.getCardBalance(transferInfo.getCardFrom());
         if (curBalance < paidSum) {
             moneyTransferRepository.registerNewTransfer(transferInfo, false);
-            throw new ErrorTransfer("Not enough money on card from");
+            throw new ErrorTransfer("Недостаточно денег на карте отправителя");
         }
-        transferInfo.getCardFrom().setBalance(curBalance - paidSum);
+        moneyTransferRepository.updateBalance(transferInfo.getCardFrom(), curBalance - paidSum);
         moneyTransferRepository.registerNewTransfer(transferInfo, true);
     }
 
@@ -40,7 +48,7 @@ public class MoneyTransferService {
             moneyTransferRepository.transferMoney(true);
         } else {
             moneyTransferRepository.transferMoney(false);
-            throw new ErrorConfirmation("Failed to confirm code");
+            throw new ErrorConfirmation("Ошибка при проверке кода подтверждения");
         }
     }
 }

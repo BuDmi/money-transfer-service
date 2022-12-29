@@ -7,12 +7,12 @@ public class Amount {
     private final String currency;
     private final double fee;
 
-    private final double PERCENT = 0.01;
+    private final static double PERCENT = 0.01;
 
     public Amount(Integer value, String currency) {
         this.value = processValue(value);
         this.currency = currency;
-        this.fee = (this.value / 100) * PERCENT;
+        this.fee = this.value * PERCENT;
     }
 
     private int processValue(Integer value) {

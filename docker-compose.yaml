@@ -1,0 +1,7 @@
+version: '1'
+services:
+  transfer_java:
+    container_name: transfer_java
+    build: ./
+    ports:
+      - '5500:5500'

@@ -1,5 +1,7 @@
 package ru.netology.moneytransfer.model;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import ru.netology.moneytransfer.exception.ErrorInputData;
 
 public class Amount {
@@ -9,7 +11,8 @@ public class Amount {
 
     private final static double PERCENT = 0.01;
 
-    public Amount(Integer value, String currency) {
+    @JsonCreator
+    public Amount(@JsonProperty("value") Integer value, @JsonProperty("currency") String currency) {
         this.value = processValue(value);
         this.currency = currency;
         this.fee = this.value * PERCENT;
@@ -17,9 +20,11 @@ public class Amount {
 
     private int processValue(Integer value) {
         if (value == null) {
+            System.out.println("Сумма перевода не указана");
             throw new ErrorInputData("Сумма перевода не указана");
         }
         if (value <= 0) {
+            System.out.println("Сумма перевода не может быть меньше или равна 0");
             throw new ErrorInputData("Сумма перевода не может быть меньше или равна 0");
         }
         return value / 100;

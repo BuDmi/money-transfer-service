@@ -35,9 +35,11 @@ public class Card {
 
     private String processCvc(String cvc) {
         if (cvc.isEmpty()) {
+            System.out.println("No value of cvc");
             throw new ErrorInputData("No value of cvc");
         }
         if (cvc.length() != 3) {
+            System.out.println("Cvc must have 3 numbers");
             throw new ErrorInputData("Cvc must have 3 numbers");
         }
         return cvc;
@@ -45,18 +47,22 @@ public class Card {
 
     private String processValidTill(String validTill) {
         if (validTill.isEmpty()) {
+            System.out.println("No value of card valid till");
             throw new ErrorInputData("No value of card valid till");
         }
         if (validTill.length() != 5) {
+            System.out.println("Card valid till must have 5 symbols");
             throw new ErrorInputData("Card valid till must have 5 symbols");
         }
 
         YearMonth validDate = YearMonth.parse(validTill, DateTimeFormatter.ofPattern("MM/yy"));
         if (YearMonth.now(ZoneOffset.UTC).isAfter(validDate)) {
+            System.out.println("Card has expired");
             throw new ErrorInputData("Card has expired");
         }
         int month = validDate.getMonthValue();
         if (month < 1 || month > 12) {
+            System.out.println("Invalid month value for card valid till");
             throw new ErrorInputData("Invalid month value for card valid till");
         }
         return validTill;
@@ -64,9 +70,11 @@ public class Card {
 
     private String processCardNumber(String number) {
         if (number.isEmpty()) {
+            System.out.println("No value of card number");
             throw new ErrorInputData("No value of card number");
         }
         if (number.length() != 16) {
+            System.out.println("Сard number must have 16 numbers");
             throw new ErrorInputData("Card number must have 16 numbers");
         }
         return number;

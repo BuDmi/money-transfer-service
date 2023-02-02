@@ -1,4 +1,4 @@
-package ru.netology.moneytransfer.advice;
+package ru.netology.moneytransfer.handler;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

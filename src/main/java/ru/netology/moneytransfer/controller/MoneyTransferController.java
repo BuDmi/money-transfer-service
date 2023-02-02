@@ -3,6 +3,8 @@ package ru.netology.moneytransfer.controller;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.netology.moneytransfer.model.TransferInfo;
 import ru.netology.moneytransfer.model.Confirmation;
@@ -10,31 +12,27 @@ import ru.netology.moneytransfer.model.SuccessResponse;
 import ru.netology.moneytransfer.service.MoneyTransferService;
 
 @RestController
-@RequestMapping("/")
 public class MoneyTransferController {
-    private Logger log = LoggerFactory.getLogger(MoneyTransferController.class);
-    private MoneyTransferService moneyTransferService;
+    private final Logger log = LoggerFactory.getLogger(MoneyTransferController.class);
+    private final MoneyTransferService moneyTransferService;
     private final String frontUrl = "https://serp-ya.github.io/";
     public MoneyTransferController(
-        @Value("${app.front.url") String frontUrl,
         MoneyTransferService moneyTransferService
     ) {
-        // TODO: Use value from application.properties
-        //this.frontUrl = frontUrl;
         this.moneyTransferService = moneyTransferService;
     }
 
-    @PostMapping(value = "transfer", consumes = "application/json", produces = "application/json")
+    @PostMapping(value = "transfer")
     @CrossOrigin(value = frontUrl)
-    public SuccessResponse transfer(@RequestBody TransferInfo transferInfo) {
+    public ResponseEntity<SuccessResponse> transfer(@RequestBody TransferInfo transferInfo) {
         moneyTransferService.registerNewTransfer(transferInfo);
-        return new SuccessResponse();
+        return new ResponseEntity<>(new SuccessResponse(), HttpStatus.OK);
     }
 
-    @PostMapping(value = "confirmOperation", consumes = "application/json", produces = "application/json")
+    @PostMapping(value = "confirmOperation")
     @CrossOrigin(value = frontUrl)
-    public SuccessResponse confirmOperation(@RequestBody Confirmation confirmation) {
+    public ResponseEntity<SuccessResponse> confirmOperation(@RequestBody Confirmation confirmation) {
         moneyTransferService.transferMoney(confirmation);
-        return new SuccessResponse(confirmation.getOperationId());
+        return new ResponseEntity<>(new SuccessResponse(confirmation.getOperationId()), HttpStatus.OK);
     }
 }

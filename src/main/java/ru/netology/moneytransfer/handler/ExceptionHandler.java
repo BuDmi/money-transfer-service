@@ -13,19 +13,16 @@ public class ExceptionHandler {
 
     @org.springframework.web.bind.annotation.ExceptionHandler(ErrorInputData.class)
     public ResponseEntity<ErrorResponse> eidHandler(ErrorInputData e) {
-        HttpStatus httpStatus = HttpStatus.BAD_REQUEST;
-        return new ResponseEntity<>(new ErrorResponse(e.getMessage(), httpStatus.value()), httpStatus);
+        return ResponseEntity.badRequest().body(new ErrorResponse(e.getMessage(), HttpStatus.BAD_REQUEST.value()));
     }
 
     @org.springframework.web.bind.annotation.ExceptionHandler(ErrorTransfer.class)
     public ResponseEntity<ErrorResponse> etHandler(ErrorTransfer e) {
-        HttpStatus httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
-        return new ResponseEntity<>(new ErrorResponse(e.getMessage(), httpStatus.value()), httpStatus);
+        return ResponseEntity.internalServerError().body(new ErrorResponse(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR.value()));
     }
 
     @org.springframework.web.bind.annotation.ExceptionHandler(ErrorConfirmation.class)
     public ResponseEntity<ErrorResponse> ecHandler(ErrorConfirmation e) {
-        HttpStatus httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
-        return new ResponseEntity<>(new ErrorResponse(e.getMessage(), httpStatus.value()), httpStatus);
+        return ResponseEntity.internalServerError().body(new ErrorResponse(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR.value()));
     }
 }

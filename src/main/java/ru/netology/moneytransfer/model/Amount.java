@@ -1,33 +1,19 @@
 package ru.netology.moneytransfer.model;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import ru.netology.moneytransfer.exception.ErrorInputData;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
 
 public class Amount {
+    @NotNull
+    @Positive
     private final Integer value;
     private final String currency;
-    private final double fee;
-
-    private final static double PERCENT = 0.01;
 
     @JsonCreator
-    public Amount(@JsonProperty("value") Integer value, @JsonProperty("currency") String currency) {
-        this.value = processValue(value);
+    public Amount(Integer value, String currency) {
+        this.value = value / 100;
         this.currency = currency;
-        this.fee = this.value * PERCENT;
-    }
-
-    private int processValue(Integer value) {
-        if (value == null) {
-            System.out.println("Сумма перевода не указана");
-            throw new ErrorInputData("Сумма перевода не указана");
-        }
-        if (value <= 0) {
-            System.out.println("Сумма перевода не может быть меньше или равна 0");
-            throw new ErrorInputData("Сумма перевода не может быть меньше или равна 0");
-        }
-        return value / 100;
     }
 
     public String getCurrency() {
@@ -38,14 +24,9 @@ public class Amount {
         return value;
     }
 
-    public double getFee() {
-        return fee;
-    }
-
     @Override
     public String toString() {
         return "Сумма перевода=" + value +
-            ", Валюта='" + currency + '\'' +
-            ", Комиссия=" + fee;
+            ", Валюта='" + currency + '\'';
     }
 }
